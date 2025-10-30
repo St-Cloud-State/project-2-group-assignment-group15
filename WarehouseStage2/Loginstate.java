@@ -7,12 +7,13 @@ import java.io.*;
 public class Loginstate extends WareState implements ActionListener{
   private static final int CLERK_LOGIN = 0;
   private static final int USER_LOGIN = 1;
-  private static final int EXIT = 2;
+  private static final int MANAGER_LOGIN = 2;
+  private static final int EXIT = 3;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));  
   private WareContext context;
   private JFrame frame;
   private static Loginstate instance;
-  private AbstractButton userButton, logoutButton, clerkButton;
+  private AbstractButton userButton, logoutButton, clerkButton, managerButton;
   //private ClerkButton clerkButton;
   private Loginstate() {
       super();
@@ -37,9 +38,11 @@ public class Loginstate extends WareState implements ActionListener{
        {//System.out.println("user \n"); 
          this.user();}
     else if (event.getSource().equals(this.logoutButton)) 
-       (WareContext.instance()).changeState(2);
+       (WareContext.instance()).changeState(3);
     else if (event.getSource().equals(this.clerkButton)) 
        this.clerk();
+    else if (event.getSource().equals(this.managerButton))
+        this.manager();
   } 
 
  
@@ -68,7 +71,21 @@ public class Loginstate extends WareState implements ActionListener{
     }
     else 
       JOptionPane.showMessageDialog(frame,"Invalid user id.");
-  } 
+  }
+
+  private void manager() {
+    String managerID = JOptionPane.showInputDialog(
+                       frame, "Please input the manager id: ");
+      if (managerID != null && managerID.equals("manager")) {  // Placeholder
+      (WareContext.instance()).setLogin(WareContext.IsManager);  // You may need to add IsManager constant
+      (WareContext.instance()).setUser(managerID);
+      clear();
+      (WareContext.instance()).changeState(2);  // Go to ManagerState
+    }
+    else {
+      JOptionPane.showMessageDialog(frame, "Invalid manager id.");
+    }
+  }
 
 
   public void run() {
@@ -78,12 +95,15 @@ public class Loginstate extends WareState implements ActionListener{
    frame.getContentPane().setLayout(new FlowLayout());
        userButton = new JButton("user");
       clerkButton =  new ClerkButton();
+      managerButton = new JButton("manager");
       logoutButton = new JButton("logout");  
       userButton.addActionListener(this);
       logoutButton.addActionListener(this);
-      //clerkButton.addActionListener(this);      
+      clerkButton.addActionListener(this);
+      managerButton.addActionListener(this);
    frame.getContentPane().add(this.userButton);
    frame.getContentPane().add(this.clerkButton);
+   frame.getContentPane().add(this.managerButton);
    frame.getContentPane().add(this.logoutButton);
    frame.setVisible(true);
    frame.paint(frame.getGraphics()); 

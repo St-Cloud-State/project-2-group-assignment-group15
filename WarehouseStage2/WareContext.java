@@ -11,11 +11,12 @@ public class WareContext {
   private static WareContext context;
   private int currentUser;
   private String userID;
-  private static JFrame LibFrame; 
+  private static JFrame WareFrame; 
   private BufferedReader reader = new BufferedReader(new 
                                       InputStreamReader(System.in));
   public static final int IsClerk = 0;
   public static final int IsUser = 1;
+  public static final int IsManager = 2;
   private static WareState[] states;
   private int[][] nextState;
 
@@ -80,18 +81,23 @@ public class WareContext {
       warehouse = Warehouse.instance();
     }
     // set up the FSM and transition table;
-    states = new WareState[3];
+    states = new WareState[4];
     states[0] = Clerkstate.instance();
-    states[1] = Userstate.instance(); 
-    states[2]=  Loginstate.instance();
-    nextState = new int[3][3];
-    nextState[0][0] = 2;nextState[0][1] = 1;nextState[0][2] = -2;
-    nextState[1][0] = 2;nextState[1][1] = 0;nextState[1][2] = -2;
-    nextState[2][0] = 0;nextState[2][1] = 1;nextState[2][2] = -1;
-    currentState = 2;
+    states[1] = Clientstate.instance();
+    states[2] = Managerstate.instance();
+    states[3]=  Loginstate.instance();
+    nextState = new int[4][4];
+    nextState[0][0] = 3; nextState[0][1] = 1; nextState[0][2] = -2; nextState[0][3] = -2;
+    // From ClientState [1]:
+    nextState[1][0] = 3; nextState[1][1] = -2; nextState[1][2] = -2; nextState[1][3] = -2;
+    // From ManagerState [2]:
+    nextState[2][0] = 3; nextState[2][1] = 1; nextState[2][2] = 0; nextState[2][3] = -2;
+    // From LoginState [3]:
+    nextState[3][0] = 0; nextState[3][1] = 1; nextState[3][2] = 2; nextState[3][3] = -1;
+    currentState = 3; // Start at LoginState
     WareFrame = new JFrame("Warehouse GUI");
-	WareFrame.addWindowListener(new WindowAdapter()
-       {public void windowClosing(WindowEvent e){System.exit(0);}});
+    WareFrame.addWindowListener(new WindowAdapter()
+    {public void windowClosing(WindowEvent e){System.exit(0);}});
     WareFrame.setSize(400,400);
     WareFrame.setLocation(400, 400);
     }
