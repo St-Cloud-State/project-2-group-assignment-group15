@@ -9,10 +9,11 @@ public class ClientState extends WareState {
     private static final int SHOW_CLIENT_DETAILS = 1;
     private static final int SHOW_PRODUCTS = 2;
     private static final int SHOW_TRANSACTIONS = 3;
-    private static final int ADD_TO_WISHLIST = 4;
-    private static final int SHOW_WISHLIST = 5;
-    private static final int PLACE_ORDER = 6;
-    private static final int HELP = 7;
+    private static final int SHOW_ORDERS = 4;
+    private static final int ADD_TO_WISHLIST = 5;
+    private static final int SHOW_WISHLIST = 6;
+    private static final int PLACE_ORDER = 7;
+    private static final int HELP = 8;
 
     private ClientState() {
         warehouse = Warehouse.instance();
@@ -94,6 +95,7 @@ public class ClientState extends WareState {
         System.out.println(SHOW_CLIENT_DETAILS + " to see client's details");
         System.out.println(SHOW_PRODUCTS + " to see the warehouse inventory");
         System.out.println(SHOW_TRANSACTIONS + " to see the client's transactions");
+        System.out.println(SHOW_ORDERS + " to see the client's orders");
         System.out.println(ADD_TO_WISHLIST + " to add products to wishlist");
         System.out.println(SHOW_WISHLIST + " to see the client's wishlist");
         System.out.println(HELP + " for help");
@@ -139,6 +141,22 @@ public class ClientState extends WareState {
 
     }
 
+    public void showClientOrders() {
+        String clientId = WareContext.instance().getUser();
+        Client c = warehouse.verifyClient(clientId);
+        if (c == null) {
+            System.out.println("No clients matching that ID");
+        } else {
+            System.out.println("ORDERS FOR CLIENT: " + c.getId() + " " + c.getName());
+            System.out.println("------------------------------------------------------------\n\n");
+            Iterator<Order> orders = warehouse.getClientOrders(c);
+            while (orders.hasNext()) {
+                Order o = orders.next();
+                System.out.println(o.toString());
+            }
+        }
+    }
+
     public void addToWishlist() {
         WishlistItem result;
         do {
@@ -181,6 +199,62 @@ public class ClientState extends WareState {
                 System.out.println(item.toString());
             }
             System.out.println("================================================================");
+        }
+    }
+
+    public placeOrder() {
+        String clientId = WareContext.instance().getUser(); 
+        Client c = warehouse.verifyClient(clientId);
+        if (c == null) {
+            System.out.println("No clients matching that ID");
+            return;
+        }
+        if (c.getWishlist().isEmpty()) {
+            System.out.println("Client's wishlist is empty");
+            return;
+        }
+
+        Iterator<WishlistItem> wlItems = warehouse.getClientWishlist(clientId);
+        
+        // Action Loop -- Confirm, Remove, Change Quantity of wishlist items
+        System.out.println("\nConfirm, Update, or Remove items from wishlist:\n");
+
+        while (wlItems.hasNext()) {
+            WishlistItem item = wlItems.next();
+            System.out.println("\nID  PRODUCT NAME  PRICE   QUANTITY");
+            System.out.println("================================================================");
+            System.out.println(item.toString());
+            System.out.println("================================================================");
+            System.out.println("\nPlease Select an action:");
+            System.out.println("1 to confirm product and quantity");
+            System.out.println("2 to remove item from wishlist");
+            System.out.println("3 change quantity of product\n");
+            int choice = getNumber("Enter choice:");
+            switch (choice) {
+                case 1:
+                System.out.println("Item confirmed\n");
+                break;
+                case 2:
+                wlItems.remove();
+                System.out.println("Item removed from wishlist\n");
+                break;
+                case 3:
+                int newQuant = getNumber("Enter new quantity:");
+                warehouse.updateWishlistItemQuantity(clientId, item, newQuant);
+                System.out.println("Item quantity updated\n");
+                break;
+                default:
+                System.out.println("Invalid choice, item confirmed by default\n");
+            }
+        }
+
+        Order order = warehouse.processClientOrder(clientId);
+        if (order == null) {
+            System.out.println("Order was not processed");
+        } else {
+            System.out.println("Order processed successfully:");
+            System.out.println("\n------------------------------------------------------------");
+            System.out.println(order.toString());
         }
     }
 
