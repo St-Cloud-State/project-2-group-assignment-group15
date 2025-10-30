@@ -107,7 +107,7 @@ public class ClientState extends WareState {
         Client c = warehouse.verifyClient(clientId);
         System.out.printf("%-5s %-15s %-20s %-15s %-9s %-8s%n", "ID", "NAME", "ADDRESS", "PHONE", "BALANCE", "CREDIT");
         System.out.println("==============================================================================");
-        System.out.println(c.toString())
+        System.out.println(c.toString());
         System.out.println("==============================================================================");
     }
 
@@ -202,7 +202,7 @@ public class ClientState extends WareState {
         }
     }
 
-    public placeOrder() {
+    public void placeOrder() {
         String clientId = WareContext.instance().getUser(); 
         Client c = warehouse.verifyClient(clientId);
         if (c == null) {

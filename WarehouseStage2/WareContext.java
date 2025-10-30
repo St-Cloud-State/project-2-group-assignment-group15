@@ -82,10 +82,10 @@ public class WareContext {
     }
     // set up the FSM and transition table;
     states = new WareState[4];
-    states[0] = Clerkstate.instance();
-    states[1] = Clientstate.instance();
-    states[2] = Managerstate.instance();
-    states[3]=  Loginstate.instance();
+    states[0] = ClerkState.instance();
+    states[1] = ClientState.instance();
+    states[2] = ManagerState.instance();
+    states[3]=  LoginState.instance();
     nextState = new int[4][4];
     nextState[0][0] = 3; nextState[0][1] = 1; nextState[0][2] = -2; nextState[0][3] = -2;
     // From ClientState [1]:
