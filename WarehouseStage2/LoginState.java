@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.text.*;
 import java.io.*;
-public class Loginstate extends WareState implements ActionListener{
+public class LoginState extends WareState implements ActionListener{
   private static final int CLERK_LOGIN = 0;
   private static final int USER_LOGIN = 1;
   private static final int MANAGER_LOGIN = 2;
@@ -12,10 +12,10 @@ public class Loginstate extends WareState implements ActionListener{
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));  
   private WareContext context;
   private JFrame frame;
-  private static Loginstate instance;
+  private static LoginState instance;
   private AbstractButton userButton, logoutButton, clerkButton, managerButton;
   //private ClerkButton clerkButton;
-  private Loginstate() {
+  private LoginState() {
       super();
       /*userButton = new JButton("user");
       clerkButton =  new JButton("clerk");
@@ -26,9 +26,9 @@ public class Loginstate extends WareState implements ActionListener{
  //     ((ClerkButton)clerkButton).setListener();
   }
 
-  public static Loginstate instance() {
+  public static LoginState instance() {
     if (instance == null) {
-      instance = new Loginstate();
+      instance = new LoginState();
     }
     return instance;
   }
@@ -76,8 +76,8 @@ public class Loginstate extends WareState implements ActionListener{
   private void manager() {
     String managerID = JOptionPane.showInputDialog(
                        frame, "Please input the manager id: ");
-      if (managerID != null && managerID.equals("manager")) {  // Placeholder
-      (WareContext.instance()).setLogin(WareContext.IsManager);  // You may need to add IsManager constant
+      if (managerID != null && managerID.equals("manager")) {  
+      (WareContext.instance()).setLogin(WareContext.IsManager);  
       (WareContext.instance()).setUser(managerID);
       clear();
       (WareContext.instance()).changeState(2);  // Go to ManagerState
@@ -93,7 +93,7 @@ public class Loginstate extends WareState implements ActionListener{
    frame = WareContext.instance().getFrame();
    frame.getContentPane().removeAll();
    frame.getContentPane().setLayout(new FlowLayout());
-       userButton = new JButton("user");
+      userButton = new JButton("user");
       clerkButton =  new ClerkButton();
       managerButton = new JButton("manager");
       logoutButton = new JButton("logout");  
