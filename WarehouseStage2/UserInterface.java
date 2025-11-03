@@ -384,7 +384,10 @@ public class UserInterface {
   }
 
   public void receiveShipment() {
-	  warehouse.receiveShipment();
+	    String productID = getToken("Enter Product ID");
+      int quantity = getNumber("Enter quantity");
+      Product product = warehouse.verifyProduct(productID);
+      warehouse.receiveShipment(product, quantity);
   }
   public void process() {
     int command;

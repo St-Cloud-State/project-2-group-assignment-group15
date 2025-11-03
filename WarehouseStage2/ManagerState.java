@@ -20,7 +20,6 @@ public class ManagerState extends WareState {
     private ManagerState() {
         super();
         warehouse = Warehouse.instance();
-        //context = LibContext.instance();
     }
     public String getToken(String prompt) {
         do {
@@ -100,7 +99,7 @@ public class ManagerState extends WareState {
             if (result != null) {
                 System.out.println(result);
             } else {
-                System.out.println("Book could not be added");
+                System.out.println("Product could not be added");
             }
             if (!yesOrNo("Add more products?")) {
                 break;
@@ -133,31 +132,31 @@ public class ManagerState extends WareState {
         String productID = getToken("Enter Product ID");
         int quantity = getNumber("Enter quantity");
 
-        Product product = warehouse.invenstory.search(productID);
+        Product product = warehouse.verifyProduct(productID);
 
         if (product == null) {
             System.out.println("ERROR: Product not found");
             return;
         }
 
-        warehouse.processShipment(product, quantity);
-        warehouse.displayShipmentConfirmation(product, quantity);
+        warehouse.receiveShipment(product, quantity);
     }
 
+    // Where does 'clerkstate' come from???
     public void becomeClerk() {
-        WareContext.changestate(clerkstate);
-    }
-
-    public void logout() {
-        terminate(exitcode);
+        WareContext.instance().changestate(clerkstate);
     }
 
     public void terminate(int exitcode)
     {
         (WareContext.instance()).changeState(exitcode); // exit with a code
     }
+    
+    public void logout(int exitcode) {
+        terminate(exitcode);
+    }
 
-
+   
     public void process() {
         int command, exitcode = -1;
         help();
@@ -170,9 +169,9 @@ public class ManagerState extends WareState {
                     break;
                 case RECEIVE_SHIPMENT:      receiveShipment();
                     break;
-                case BECOME_CLERK:      //removeBooks();
+                case BECOME_CLERK:      becomeClerk();
                     break;
-                case LOGOUT:      //processHolds();
+                case LOGOUT:      //logic to determine if go back to manager from clerk or terminate;
                     break;
 
                 case HELP:              help();
@@ -180,7 +179,7 @@ public class ManagerState extends WareState {
 
             }
         }
-        terminate(exitcode);
+        logout(exitcode);
     }
     public void run() {
         process();

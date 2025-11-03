@@ -66,10 +66,8 @@ class Warehouse implements Serializable { // Warehouse class
                 amount, client.getId(),client.getName());
     } 
     
-    public void receiveShipment() {
-        String productId = UserInterface.instance().getToken("Enter Product ID");
-        int quantity = UserInterface.instance().getNumber("Enter quantity");
-        
+    public void receiveShipment(String productId, int quantity) {
+    
         Product product = inventory.search(productId);
         
         if(product == null) {

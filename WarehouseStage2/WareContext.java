@@ -95,11 +95,12 @@ public class WareContext {
     // From LoginState [3]:
     nextState[3][0] = 0; nextState[3][1] = 1; nextState[3][2] = 2; nextState[3][3] = -1;
     currentState = 3; // Start at LoginState
-    WareFrame = new JFrame("Warehouse GUI");
+    
+  /*   WareFrame = new JFrame("Warehouse GUI");
     WareFrame.addWindowListener(new WindowAdapter()
     {public void windowClosing(WindowEvent e){System.exit(0);}});
     WareFrame.setSize(400,400);
-    WareFrame.setLocation(400, 400);
+    WareFrame.setLocation(400, 400); */
     }
 
   public void changeState(int transition)
