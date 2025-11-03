@@ -3,4 +3,5 @@ public abstract class WareState {
     protected WareState() {
         context = WareContext.instance();
     }
+    public abstract void run();
 }

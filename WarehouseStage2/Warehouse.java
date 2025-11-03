@@ -66,9 +66,7 @@ class Warehouse implements Serializable { // Warehouse class
                 amount, client.getId(),client.getName());
     } 
     
-    public void receiveShipment(String productId, int quantity) {
-    
-        Product product = inventory.search(productId);
+    public void receiveShipment(Product product, int quantity) {
         
         if(product == null) {
             System.out.println("ERROR: Product not found");

@@ -7,7 +7,7 @@ public class ManagerState extends WareState {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
     private WareContext context;
-    private static WareState instance;
+    private static ManagerState instance;
     private static final int ADD_PRODUCT = 0;
     private static final int DISPLAY_WAITLIST = 1;
     private static final int RECEIVE_SHIPMENT = 2;
@@ -20,6 +20,13 @@ public class ManagerState extends WareState {
     private ManagerState() {
         super();
         warehouse = Warehouse.instance();
+    }
+
+    public static ManagerState instance() {
+        if (instance == null) {
+            instance = new ManagerState();
+        }
+        return instance;
     }
     public String getToken(String prompt) {
         do {
