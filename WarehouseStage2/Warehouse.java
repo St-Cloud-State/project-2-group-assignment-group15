@@ -12,6 +12,7 @@ class Warehouse implements Serializable { // Warehouse class
     Warehouse() { // Constructor
         clientList = ClientList.instance();
         inventory = ProductList.instance();
+        
     }
 
     public static Warehouse instance() {

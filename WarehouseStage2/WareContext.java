@@ -77,7 +77,7 @@ public class WareContext {
     System.out.println("In Warecontext constructor");
     if (yesOrNo("Look for saved data and  use it?")) {
       retrieve();
-    } else {
+    } else if (warehouse == null) {
       warehouse = Warehouse.instance();
     }
     // set up the FSM and transition table;
