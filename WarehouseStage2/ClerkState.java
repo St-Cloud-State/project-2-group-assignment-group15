@@ -91,7 +91,7 @@ public class ClerkState extends WareState {
     }
 
     public void help() {
-        System.out.println("Enter a number between 0 and 12 as explained below:");
+        System.out.println("Enter a number between 0 and 8 as explained below:");
         System.out.println(EXIT + " to Exit\n");
         System.out.println(ADD_CLIENT + " to add a client");
         System.out.println(SHOW_PRODUCTS + " to see warehouse inventory");
@@ -165,6 +165,11 @@ public class ClerkState extends WareState {
         }
     }
 
+    public int logout() {
+        System.out.println(WareContext.instance().getLogin());
+        return WareContext.instance().getLogin();
+    }
+
     public void terminate(int exitcode) {
         (WareContext.instance()).changeState(exitcode); // exit with a code 
     }
@@ -183,11 +188,13 @@ public class ClerkState extends WareState {
                                                     break;
                 case SHOW_OUTSTANDING_CLIENTS:      showOutstandingClients();
                                                     break;
-                case BECOME_CLIENT:                 becomeClient();
+                case BECOME_CLIENT:                 if (becomeClient())
+                                                    {exitcode = 1;done = true;}
                                                     break;
                 case HELP:                          help();
                                                     break;
-                case EXIT:                          if (becomeClient()){exitcode = 1; done = true;}
+                case EXIT:                          exitcode = 0;
+                                                    done = true;
                                                     break;
             }
         }
