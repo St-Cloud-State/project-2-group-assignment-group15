@@ -62,20 +62,10 @@ public class LoginState extends WareState {
         }
     }
 
-    private boolean manager() {
-        String managerID = getToken("Please enter the manager id:");
-        if (managerID != null && managerID.equals("manager")) {
-            (WareContext.instance()).setLogin(WareContext.IsManager);
-            (WareContext.instance()).setUser(managerID);
-            //clear();
-            (WareContext.instance()).changeState(2);  // Go to ManagerState
-            return true;
-        } else {
-            System.out.println("Invalid manager id.");
-            return false;
-
-        }
-    }
+    private void manager() {
+            (WareContext.instance()).setLogin(WareContext.IsManager); 
+            (WareContext.instance()).changeState(2);                
+  }
 
 
 
@@ -104,9 +94,8 @@ public class LoginState extends WareState {
                     }
                     break;
                 case MANAGER_LOGIN:
-                    if (manager()) {
-                        done = true;
-                    }
+                    manager();
+                    done = true;
                     break;
                 case EXIT:
                     (WareContext.instance()).changeState(3);
