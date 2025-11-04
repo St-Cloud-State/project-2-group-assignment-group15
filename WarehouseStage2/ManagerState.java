@@ -1,3 +1,4 @@
+import javax.imageio.plugins.tiff.ExifInteroperabilityTagSet;
 import java.util.*;
 import java.text.*;
 import java.io.*;
@@ -6,15 +7,14 @@ import java.io.*;
 public class ManagerState extends WareState {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Warehouse warehouse;
-    private WareContext context;
     private static ManagerState instance;
-    private static final int ADD_PRODUCT = 0;
-    private static final int DISPLAY_WAITLIST = 1;
-    private static final int RECEIVE_SHIPMENT = 2;
-    private static final int BECOME_CLERK = 3;
-    private static final int LOGOUT = 4;
-
-    private static final int HELP = 5;
+    private static final int EXIT = 0;
+    private static final int ADD_PRODUCT = 1;
+    private static final int DISPLAY_WAITLIST = 2;
+    private static final int RECEIVE_SHIPMENT = 3;
+    private static final int BECOME_CLERK = 4;
+    private static final int LOGOUT = 5;
+    private static final int HELP = 6;
 
 
     private ManagerState() {
@@ -150,8 +150,13 @@ public class ManagerState extends WareState {
     }
 
     // Where does 'clerkstate' come from???
-    public void becomeClerk() {
-        WareContext.instance().changestate(clerkstate);
+    public boolean becomeClerk() {
+        if (WareContext.instance().getLogin() == 2) {
+            int clerkState = 0;
+            WareContext.instance().changeState(clerkState);
+            return true;
+        }
+        return false;
     }
 
     public void terminate(int exitcode)
@@ -180,10 +185,9 @@ public class ManagerState extends WareState {
                     break;
                 case LOGOUT:      //logic to determine if go back to manager from clerk or terminate;
                     break;
-
                 case HELP:              help();
                     break;
-
+                case EXIT:              if (becomeClerk()){exitcode=0; done=true; becomeClerk();};
             }
         }
         logout(exitcode);

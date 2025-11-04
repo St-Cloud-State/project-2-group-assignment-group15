@@ -1,115 +1,121 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-import java.text.*;
 import java.io.*;
-public class LoginState extends WareState implements ActionListener{
-  private static final int CLERK_LOGIN = 0;
-  private static final int USER_LOGIN = 1;
-  private static final int MANAGER_LOGIN = 2;
-  private static final int EXIT = 3;
-  private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));  
-  private WareContext context;
-  private JFrame frame;
-  private static LoginState instance;
-  private AbstractButton userButton, logoutButton, clerkButton, managerButton;
-  //private ClerkButton clerkButton;
-  private LoginState() {
-      super();
-      /*userButton = new JButton("user");
-      clerkButton =  new JButton("clerk");
-      logoutButton = new JButton("logout");
-      userButton.addActionListener(this);
-      logoutButton.addActionListener(this);
-      clerkButton.addActionListener(this); */
- //     ((ClerkButton)clerkButton).setListener();
-  }
+public class LoginState extends WareState {
+    private static final int CLERK_LOGIN = 0;
+    private static final int USER_LOGIN = 1;
+    private static final int MANAGER_LOGIN = 2;
+    private static final int EXIT = 3;
+    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private WareContext context;
 
-  public static LoginState instance() {
-    if (instance == null) {
-      instance = new LoginState();
+    private static LoginState instance;
+
+    private LoginState() {
+        super();
     }
-    return instance;
-  }
 
-  public void actionPerformed(ActionEvent event) {
-    if (event.getSource().equals(this.userButton)) 
-       {//System.out.println("user \n"); 
-         this.user();}
-    else if (event.getSource().equals(this.logoutButton)) 
-       (WareContext.instance()).changeState(3);
-    else if (event.getSource().equals(this.clerkButton)) 
-       this.clerk();
-    else if (event.getSource().equals(this.managerButton))
-        this.manager();
-  } 
-
- 
-
-  public void clear() { //clean up stuff
-    frame.getContentPane().removeAll();
-    frame.paint(frame.getGraphics());   
-  }  
-
-  private void clerk() {
-     //System.out.println("In clerk \n");
-    (WareContext.instance()).setLogin(WareContext.IsClerk);
-     clear();
-    (WareContext.instance()).changeState(0);
-
-  } 
-  
-  private void user(){
-    String userID = JOptionPane.showInputDialog(
-                     frame,"Please input the user id: ");
-    if (Warehouse.instance().verifyClient(userID) != null){
-      (WareContext.instance()).setLogin(WareContext.IsUser);
-      (WareContext.instance()).setUser(userID);  
-       clear();
-      (WareContext.instance()).changeState(1);
+    public static LoginState instance() {
+        if (instance == null) {
+            instance = new LoginState();
+        }
+        return instance;
     }
-    else 
-      JOptionPane.showMessageDialog(frame,"Invalid user id.");
-  }
 
-  private void manager() {
-    String managerID = JOptionPane.showInputDialog(
-                       frame, "Please input the manager id: ");
-      if (managerID != null && managerID.equals("manager")) {  
-      (WareContext.instance()).setLogin(WareContext.IsManager);  
-      (WareContext.instance()).setUser(managerID);
-      clear();
-      (WareContext.instance()).changeState(2);  // Go to ManagerState
+
+
+    private int getCommand() {
+        try {
+            String input = reader.readLine();
+            return Integer.parseInt(input.trim());
+        } catch (Exception e) {
+            return -1;
+        }
     }
-    else {
-      JOptionPane.showMessageDialog(frame, "Invalid manager id.");
+    private String getToken(String prompt) {
+        try {
+            System.out.print(prompt);
+            String line = reader.readLine();
+            return line;
+        } catch (IOException e) {
+            System.out.println("Error reading input.");
+            return null;
+        }
     }
-  }
+
+    private void clerk() {
+        (WareContext.instance()).setLogin(WareContext.IsClerk);
+        (WareContext.instance()).changeState(0);
+    }
 
 
-  public void run() {
-   
-   frame = WareContext.instance().getFrame();
-   frame.getContentPane().removeAll();
-   frame.getContentPane().setLayout(new FlowLayout());
-      userButton = new JButton("user");
-      clerkButton =  new ClerkButton();
-      managerButton = new JButton("manager");
-      logoutButton = new JButton("logout");  
-      userButton.addActionListener(this);
-      logoutButton.addActionListener(this);
-      clerkButton.addActionListener(this);
-      managerButton.addActionListener(this);
-   frame.getContentPane().add(this.userButton);
-   frame.getContentPane().add(this.clerkButton);
-   frame.getContentPane().add(this.managerButton);
-   frame.getContentPane().add(this.logoutButton);
-   frame.setVisible(true);
-   frame.paint(frame.getGraphics()); 
-   //frame.repaint();
-   frame.toFront();
-   frame.requestFocus();
-   
-  }
+    private boolean user(){
+        String userID = getToken("Please enter the user id");
+        if (Warehouse.instance().verifyClient(userID) != null){
+            (WareContext.instance()).setLogin(WareContext.IsUser);
+            (WareContext.instance()).setUser(userID);
+            (WareContext.instance()).changeState(1);
+            return true;
+        }
+        else {
+            System.out.println("Invalid user id.");
+            return false;
+        }
+    }
+
+    private boolean manager() {
+        String managerID = getToken("Please enter the manager id:");
+        if (managerID != null && managerID.equals("manager")) {
+            (WareContext.instance()).setLogin(WareContext.IsManager);
+            (WareContext.instance()).setUser(managerID);
+            //clear();
+            (WareContext.instance()).changeState(2);  // Go to ManagerState
+            return true;
+        } else {
+            System.out.println("Invalid manager id.");
+            return false;
+
+        }
+    }
+
+
+
+    public void run() {
+        int command;
+        boolean done = false;
+
+        while (!done) {
+            System.out.println("\n=== Login Menu ===");
+            System.out.println(CLERK_LOGIN + ". Clerk Login");
+            System.out.println(USER_LOGIN + ". User Login");
+            System.out.println(MANAGER_LOGIN + ". Manager Login");
+            System.out.println(EXIT + ". Exit");
+            System.out.print("Enter choice: ");
+
+            command = getCommand();
+
+            switch (command) {
+                case CLERK_LOGIN:
+                    clerk();
+                    done = true;
+                    break;
+                case USER_LOGIN:
+                    if (user()) {
+                        done = true;
+                    }
+                    break;
+                case MANAGER_LOGIN:
+                    if (manager()) {
+                        done = true;
+                    }
+                    break;
+                case EXIT:
+                    (WareContext.instance()).changeState(3);
+                    done = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+    }
 }
