@@ -49,7 +49,7 @@ public class LoginState extends WareState {
 
 
     private boolean user(){
-        String userID = getToken("Please enter the user id: ");
+        String userID = getToken("Please enter the user id: ").toUpperCase();
         if (Warehouse.instance().verifyClient(userID) != null){
             (WareContext.instance()).setLogin(WareContext.IsUser);
             (WareContext.instance()).setUser(userID);
@@ -63,9 +63,9 @@ public class LoginState extends WareState {
     }
 
     private void manager() {
-            (WareContext.instance()).setLogin(WareContext.IsManager); 
-            (WareContext.instance()).changeState(2);                
-  }
+        (WareContext.instance()).setLogin(WareContext.IsManager);
+        (WareContext.instance()).changeState(2);
+    }
 
 
 

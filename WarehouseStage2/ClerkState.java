@@ -17,7 +17,6 @@ public class ClerkState extends WareState {
     private ClerkState() {
         super();
         warehouse = Warehouse.instance();
-        //context = WareContext.instance(); ***IDK why this is commented out??***
     }
 
     public static ClerkState instance() {
@@ -41,14 +40,14 @@ public class ClerkState extends WareState {
             }
         } while (true);
     }
-    
+
     private boolean yesOrNo(String prompt) {
         String more = getToken(prompt + " (Y|y)[es] or anything else for no");
         if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
             return false;
         }
         return true;
-        
+
     }
 
     public int getNumber(String prompt) {
@@ -62,7 +61,7 @@ public class ClerkState extends WareState {
             }
         } while (true);
     }
-    
+
     public Calendar getDate(String prompt) {
         do {
             try {
@@ -76,7 +75,7 @@ public class ClerkState extends WareState {
             }
         } while (true);
     }
-    
+
     public int getCommand() {
         do {
             try {
@@ -157,9 +156,9 @@ public class ClerkState extends WareState {
     }
 
     public boolean becomeClient() {
-        String clientId = getToken("Please input the client id: ");
+        String clientId = (getToken("Please input the client id: ")).toUpperCase();
         if (Warehouse.instance().verifyClient(clientId) != null) {
-            (WareContext.instance()).setUser(clientId);      
+            (WareContext.instance()).setUser(clientId);
             return true;
         } else {
             System.out.println("Invalid client id."); return false;
@@ -170,7 +169,7 @@ public class ClerkState extends WareState {
         int backToMgr = 2;
         int backToLogin = 0;
         if (WareContext.instance().getLogin() == 2){
-            
+
             return backToMgr;
         }
         else {
@@ -189,21 +188,21 @@ public class ClerkState extends WareState {
         while (!done) {
             switch (getCommand()) {
                 case ADD_CLIENT:                    addClient();
-                                                    break;
+                    break;
                 case SHOW_PRODUCTS:                 showProducts();
-                                                    break;
+                    break;
                 case SHOW_CLIENTS:                  showClients();
-                                                    break;
+                    break;
                 case SHOW_OUTSTANDING_CLIENTS:      showOutstandingClients();
-                                                    break;
+                    break;
                 case BECOME_CLIENT:                 if (becomeClient())
-                                                    {exitcode = 1;done = true;}
-                                                    break;
+                {exitcode = 1;done = true;}
+                    break;
                 case HELP:                          help();
-                                                    break;
+                    break;
                 case EXIT:                          exitcode = logout();
-                                                    done = true;
-                                                    break;
+                    done = true;
+                    break;
             }
         }
         terminate(exitcode);
@@ -212,5 +211,5 @@ public class ClerkState extends WareState {
     public void run() {
         process();
     }
-    
+
 }
