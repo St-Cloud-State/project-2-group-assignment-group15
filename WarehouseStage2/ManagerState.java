@@ -13,8 +13,7 @@ public class ManagerState extends WareState {
     private static final int DISPLAY_WAITLIST = 2;
     private static final int RECEIVE_SHIPMENT = 3;
     private static final int BECOME_CLERK = 4;
-    private static final int LOGOUT = 5;
-    private static final int HELP = 6;
+    private static final int HELP = 5;
 
 
     private ManagerState() {
@@ -76,7 +75,7 @@ public class ManagerState extends WareState {
     public int getCommand() {
         do {
             try {
-                int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
+                int value = Integer.parseInt(getToken("Enter command: " + HELP + " for help"));
                 if (value >= ADD_PRODUCT && value <= HELP) {
                     return value;
                 }
@@ -86,13 +85,13 @@ public class ManagerState extends WareState {
         } while (true);
     }
     public void help() {
-        System.out.println("Enter a number between 0 and 12 as explained below:");
-        System.out.println(ADD_PRODUCT + " to add a product\n");
-        System.out.println(DISPLAY_WAITLIST + " to display a waitlist\n");
-        System.out.println(RECEIVE_SHIPMENT + " to receive a shipment\n");
-        System.out.println(BECOME_CLERK + " to become a clerk\n");
-        System.out.println(LOGOUT + " to logout of the system\n");
-
+        System.out.println("\n\nWelcome to the Manager Menu!");
+        System.out.println("Enter a number between 0 and 5 as explained below:\n");
+        System.out.println(EXIT + " to logout");
+        System.out.println(ADD_PRODUCT + " to add a product");
+        System.out.println(DISPLAY_WAITLIST + " to display a waitlist");
+        System.out.println(RECEIVE_SHIPMENT + " to receive a shipment");
+        System.out.println(BECOME_CLERK + " to become a clerk");
         System.out.println(HELP + " for help");
     }
 
@@ -149,11 +148,8 @@ public class ManagerState extends WareState {
         warehouse.receiveShipment(product, quantity);
     }
 
-    // Where does 'clerkstate' come from???
     public boolean becomeClerk() {
         if (WareContext.instance().getLogin() == 2) {
-            int clerkState = 0;
-            WareContext.instance().changeState(clerkState);
             return true;
         }
         return false;
@@ -163,11 +159,6 @@ public class ManagerState extends WareState {
     {
         (WareContext.instance()).changeState(exitcode); // exit with a code
     }
-    
-    public void logout(int exitcode) {
-        terminate(exitcode);
-    }
-
    
     public void process() {
         int command, exitcode = -1;
@@ -181,16 +172,15 @@ public class ManagerState extends WareState {
                     break;
                 case RECEIVE_SHIPMENT:      receiveShipment();
                     break;
-                case BECOME_CLERK:      becomeClerk();
-                    break;
-                case LOGOUT:      //logic to determine if go back to manager from clerk or terminate;
+                case BECOME_CLERK:      if (becomeClerk()){exitcode = 1; done = true;}
                     break;
                 case HELP:              help();
                     break;
-                case EXIT:              if (becomeClerk()){exitcode=0; done=true; becomeClerk();};
+                case EXIT:              exitcode = 0; done = true;
+                    break;
             }
         }
-        logout(exitcode);
+        terminate(exitcode);
     }
     public void run() {
         process();

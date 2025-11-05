@@ -87,13 +87,22 @@ public class WareContext {
     states[2] = ManagerState.instance();
     states[3]=  LoginState.instance();
     nextState = new int[4][4];
+    // From ClerkState [0]: 
+    // Can go to login (3) and client (1)
     nextState[0][0] = 3; nextState[0][1] = 1; nextState[0][2] = -2; nextState[0][3] = -2;
+
     // From ClientState [1]:
+    // Can only go to login (3)
     nextState[1][0] = 3; nextState[1][1] = -2; nextState[1][2] = -2; nextState[1][3] = -2;
+
     // From ManagerState [2]:
-    nextState[2][0] = 3; nextState[2][1] = 1; nextState[2][2] = 0; nextState[2][3] = -2;
-    // From LoginState [3]:
+    // Can go to login (3) and clerk (0)
+    nextState[2][0] = 3; nextState[2][1] = 0; nextState[2][2] = -2; nextState[2][3] = -2;
+
+    // From LoginState [3]: -- 
+    // Can go to clerk (0), client (1), and manager (2)
     nextState[3][0] = 0; nextState[3][1] = 1; nextState[3][2] = 2; nextState[3][3] = -1;
+
     currentState = 3; // Start at LoginState
     
   /*   WareFrame = new JFrame("Warehouse GUI");
@@ -110,7 +119,7 @@ public class WareContext {
     if (currentState == -2) 
       {System.out.println("Error has occurred"); terminate();}
     if (currentState == -1) 
-      { //System.out.println("current state " + currentState + " \n \n ");
+      { System.out.println("current state " + currentState + " \n \n ");
       terminate();}
     states[currentState].run();
   }

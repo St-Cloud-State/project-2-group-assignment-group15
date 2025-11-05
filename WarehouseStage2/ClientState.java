@@ -90,14 +90,16 @@ public class ClientState extends WareState {
     }
 
     public void help() {
-        System.out.println("Enter a number between 0 and 7 as explained below:");
-        System.out.println(EXIT + " to Logout\n");
+        System.out.println("\n\nWelcome to the Client Menu!");
+        System.out.println("Enter a number between 0 and 8 as explained below:\n");
+        System.out.println(EXIT + " to Logout");
         System.out.println(SHOW_CLIENT_DETAILS + " to see client's details");
         System.out.println(SHOW_PRODUCTS + " to see the warehouse inventory");
         System.out.println(SHOW_TRANSACTIONS + " to see the client's transactions");
         System.out.println(SHOW_ORDERS + " to see the client's orders");
         System.out.println(ADD_TO_WISHLIST + " to add products to wishlist");
         System.out.println(SHOW_WISHLIST + " to see the client's wishlist");
+        System.out.println(PLACE_ORDER + " to place an order");
         System.out.println(HELP + " for help");
     }
 
@@ -286,6 +288,8 @@ public class ClientState extends WareState {
                 case ADD_TO_WISHLIST:       addToWishlist();
                                             break;
                 case SHOW_WISHLIST:         displayWishlist();
+                                            break;
+                case PLACE_ORDER:           placeOrder();
                                             break;
                 case HELP:                  help();
                                             break;
