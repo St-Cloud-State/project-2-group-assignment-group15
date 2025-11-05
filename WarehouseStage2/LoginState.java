@@ -49,7 +49,7 @@ public class LoginState extends WareState {
 
 
     private boolean user(){
-        String userID = getToken("Please enter the user id");
+        String userID = getToken("Please enter the user id: ");
         if (Warehouse.instance().verifyClient(userID) != null){
             (WareContext.instance()).setLogin(WareContext.IsUser);
             (WareContext.instance()).setUser(userID);
