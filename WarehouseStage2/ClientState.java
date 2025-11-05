@@ -262,11 +262,15 @@ public class ClientState extends WareState {
 
     public void logout() {
         if ((WareContext.instance()).getLogin() == WareContext.IsClerk) { 
-            //stem.out.println(" going to clerk \n ");
-         (WareContext.instance()).changeState(1); // exit with a code 1
+            // Go back to clerk
+            (WareContext.instance()).changeState(1); // exit with a code 1
+        }
+        // is manager acting as clerk acting as client
+        else if ((WareContext.instance()).getLogin() == 2) {
+            (WareContext.instance()).changeState(1); // exit with a code 1
         }
         else if (WareContext.instance().getLogin() == WareContext.IsUser) {  
-            //stem.out.println(" going to login \n");
+            // Logout
             (WareContext.instance()).changeState(0); // exit with a code 2
         } 
         else {

@@ -167,7 +167,7 @@ public class ClerkState extends WareState {
     }
 
     public int logout() {
-        int backToMgr = 1;
+        int backToMgr = 2;
         int backToLogin = 0;
         if (WareContext.instance().getLogin() == 2){
             

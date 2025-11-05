@@ -76,7 +76,7 @@ public class ManagerState extends WareState {
         do {
             try {
                 int value = Integer.parseInt(getToken("Enter command: " + HELP + " for help"));
-                if (value >= ADD_PRODUCT && value <= HELP) {
+                if (value >= EXIT && value <= HELP) {
                     return value;
                 }
             } catch (NumberFormatException nfe) {
@@ -99,11 +99,16 @@ public class ManagerState extends WareState {
         Product result;
         do {
             String name = getToken("Enter name");
-            int quantity = Integer.parseInt(getToken("Enter quantity"));
-            float price = Float.parseFloat(getToken("Enter price"));
+            int quantity = (getNumber("Enter quantity"));
+            float price = (getNumber("Enter price"));
             result = warehouse.addProduct(name, quantity, price);
             if (result != null) {
-                System.out.println(result);
+                System.out.println("Product added:\n");
+                System.out.printf("%-5s %-20s %-10s %-10s%n",
+                    "ID", "NAME", "STOCK", "PRICE");
+                System.out.println("================================================================");
+                System.out.println(result.toString());
+                System.out.println("================================================================");
             } else {
                 System.out.println("Product could not be added");
             }
@@ -157,6 +162,7 @@ public class ManagerState extends WareState {
 
     public void terminate(int exitcode)
     {
+        System.out.println("inside terminate with exitcode: " + exitcode);
         (WareContext.instance()).changeState(exitcode); // exit with a code
     }
    
@@ -166,17 +172,17 @@ public class ManagerState extends WareState {
         boolean done = false;
         while (!done) {
             switch (getCommand()) {
-                case ADD_PRODUCT:        addProduct();
+                case ADD_PRODUCT:               addProduct();
                     break;
-                case DISPLAY_WAITLIST:         displayWaitlist();
+                case DISPLAY_WAITLIST:          displayWaitlist();
                     break;
-                case RECEIVE_SHIPMENT:      receiveShipment();
+                case RECEIVE_SHIPMENT:          receiveShipment();
                     break;
-                case BECOME_CLERK:      if (becomeClerk()){exitcode = 1; done = true;}
+                case BECOME_CLERK:              if (becomeClerk()){exitcode = 1; done = true;}
                     break;
-                case HELP:              help();
+                case HELP:                      help();
                     break;
-                case EXIT:              exitcode = 0; done = true;
+                case EXIT:                      exitcode = 0; done = true;
                     break;
             }
         }
