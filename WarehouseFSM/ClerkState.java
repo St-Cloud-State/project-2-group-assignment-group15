@@ -221,7 +221,8 @@ public class ClerkState extends WareState {
                 case BECOME_CLIENT:                 if (becomeClient())
                 {exitcode = 1;done = true;}
                     break;
-                case RECORD_PAYMENT:                rec
+                case RECORD_PAYMENT:                receivePayment();
+                    break;
                 case HELP:                          help();
                     break;
                 case EXIT:                          exitcode = logout();
