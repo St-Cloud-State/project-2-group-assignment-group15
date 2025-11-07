@@ -100,7 +100,7 @@ public class ManagerState extends WareState {
         do {
             String name = getToken("Enter name");
             int quantity = (getNumber("Enter quantity"));
-            float price = (getNumber("Enter price"));
+            double price = Double.parseDouble(getToken("Enter the per unit price"));
             result = warehouse.addProduct(name, quantity, price);
             if (result != null) {
                 System.out.println("Product added:\n");

@@ -5,7 +5,7 @@ class Warehouse implements Serializable { // Warehouse class
     private static final long serialVersionUID = 1L;
     private ClientList clientList;
     private ProductList inventory;
-    private static int lastProductId = 0;
+    private static int lastProductId = 1;
 
     private static Warehouse warehouse;
 
