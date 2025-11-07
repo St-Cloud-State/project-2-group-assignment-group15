@@ -11,9 +11,9 @@ public class ClerkState extends WareState {
     private static final int SHOW_PRODUCTS = 2;
     private static final int SHOW_CLIENTS = 3;
     private static final int SHOW_OUTSTANDING_CLIENTS = 4;
-    private static final int RECORD_PAYMENT = 6;
-    private static final int BECOME_CLIENT = 7;
-    private static final int HELP = 8;
+    private static final int RECORD_PAYMENT = 5;
+    private static final int BECOME_CLIENT = 6;
+    private static final int HELP = 7;
     private ClerkState() {
         super();
         warehouse = Warehouse.instance();
@@ -91,7 +91,7 @@ public class ClerkState extends WareState {
 
     public void help() {
         System.out.println("\n\nWelcome to the Clerk Menu!");
-        System.out.println("Enter a number between 0 and 8 as explained below:\n");
+        System.out.println("Enter a number between 0 and 7 as explained below:\n");
         System.out.println(EXIT + " to logout");
         System.out.println(ADD_CLIENT + " to add a client");
         System.out.println(SHOW_PRODUCTS + " to see warehouse inventory");
@@ -165,6 +165,29 @@ public class ClerkState extends WareState {
         }
     }
 
+    public void receivePayment() {
+        String clientID = getToken("Enter the ClientID"); // accept user input
+        clientID = clientID.toUpperCase();
+        String userInputClientAmount = getToken("Enter the amount");
+        double amount = 0;
+
+        try { // parse user input string into a double
+        amount = Double.parseDouble(userInputClientAmount);
+        } catch (Exception e) {
+            System.out.println("There was an issue with the input");
+        }
+
+        Calendar date = getDate("Enter the date (mm/dd/yy)"); // accept date input
+        String dateString = date.get(Calendar.MONTH)+1 + "/" + date.get(Calendar.DAY_OF_MONTH) + "/" + date.get(Calendar.YEAR);
+
+        Client targetClient = warehouse.verifyClient(clientID);
+        if (targetClient == null) { // verify client exists
+            System.out.println("Client not found");
+            return;
+        }
+
+        warehouse.receivePayment(targetClient, (float) amount, dateString); // update warehouse records
+    }
     public int logout() {
         int backToMgr = 2;
         int backToLogin = 0;
@@ -198,6 +221,7 @@ public class ClerkState extends WareState {
                 case BECOME_CLIENT:                 if (becomeClient())
                 {exitcode = 1;done = true;}
                     break;
+                case RECORD_PAYMENT:                rec
                 case HELP:                          help();
                     break;
                 case EXIT:                          exitcode = logout();
