@@ -74,7 +74,6 @@ public class WareContext {
   { return WareFrame;}
 
   private WareContext() { //constructor
-    System.out.println("In Warecontext constructor");
     if (yesOrNo("Look for saved data and  use it?")) {
       retrieve();
     } else if (warehouse == null) {
@@ -114,10 +113,6 @@ public class WareContext {
 
   public void changeState(int transition)
   {
-    System.out.println("Attempting transition " + transition + 
-                   " from state " + currentState + 
-                   " to " + nextState[currentState][transition]);
-
     //System.out.println("current state " + currentState + " \n \n ");
     currentState = nextState[currentState][transition];
     if (currentState == -2) 
@@ -142,7 +137,6 @@ public class WareContext {
 
   public static WareContext instance() {
     if (context == null) {
-       System.out.println("calling constructor");
       context = new WareContext();
     }
     return context;
